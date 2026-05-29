@@ -1,9 +1,11 @@
 """This module is for thread start."""
+# pylint: disable=superfluous-parens
 import state
 import sys
 from bitmessagemain import main
-from termcolor import colored
-print(colored('kivy is not supported at the moment for this version..', 'red'))
+from termcolor import colored  # pylint: disable=import-error
+print(colored('kivy is not supported at the moment for this version..',
+              'red'))
 sys.exit()
 
 

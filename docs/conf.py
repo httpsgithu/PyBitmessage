@@ -6,14 +6,16 @@ For a full list of options see the documentation:
 http://www.sphinx-doc.org/en/master/config
 """
 
+# flake8: noqa:E402
+
 import os
 import sys
 
 sys.path.insert(0, os.path.abspath('../src'))
 
-from importlib import import_module
+from importlib import import_module  # pylint: disable=wrong-import-position
 
-import version  # noqa:E402
+import version  # noqa:E402 pylint: disable=wrong-import-position
 
 
 # -- Project information -----------------------------------------------------

@@ -3,8 +3,11 @@
 Indicator plugin using libmessaging
 """
 
+# flake8: noqa:E402
+# pycodestyle: disable=E402
+# pylint: disable=import-error,no-name-in-module
 import gi
-gi.require_version('MessagingMenu', '1.0')  # noqa:E402
+gi.require_version('MessagingMenu', '1.0')
 from gi.repository import MessagingMenu
 
 from pybitmessage.bitmessageqt.utils import str_broadcast_subscribers

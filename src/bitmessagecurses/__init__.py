@@ -10,6 +10,7 @@ Bitmessage commandline interface
 #     * python2-pythondialog
 #  * dialog
 
+# pylint: disable=global-statement,too-many-lines,no-member
 import ConfigParser
 import curses
 import os
@@ -18,7 +19,7 @@ import time
 from textwrap import fill
 from threading import Timer
 
-from dialog import Dialog
+from dialog import Dialog  # pylint: disable=import-error
 import helper_sent
 import l10n
 import network.stats
@@ -30,8 +31,6 @@ import state
 from addresses import addBMIfNotPresent, decodeAddress
 from bmconfigparser import config
 from helper_sql import sqlExecute, sqlQuery
-
-# pylint: disable=global-statement
 
 
 quit_ = False
@@ -252,14 +251,14 @@ def drawtab(stdscr):
             # Connection data
             connected_hosts = network.stats.connectedHostsList()
             stdscr.addstr(
-                4, 5, "Total Connections: " +
-                str(len(connected_hosts)).ljust(2)
+                4, 5, "Total Connections: "
+                + str(len(connected_hosts)).ljust(2)
             )
             stdscr.addstr(6, 6, "Stream #", curses.A_BOLD)
             stdscr.addstr(6, 18, "Connections", curses.A_BOLD)
             stdscr.hline(7, 6, '-', 23)
             streamcount = []
-            for host, stream in connected_hosts:
+            for _, stream in connected_hosts:
                 if stream >= len(streamcount):
                     streamcount.append(1)
                 else:
@@ -350,13 +349,13 @@ def handlech(c, stdscr):
                         if t == "1":  # View
                             set_background_title(
                                 d,
-                                "\"" +
-                                inbox[inboxcur][5] +
-                                "\" from \"" +
-                                inbox[inboxcur][3] +
-                                "\" to \"" +
-                                inbox[inboxcur][1] +
-                                "\"")
+                                "\""
+                                + inbox[inboxcur][5]
+                                + "\" from \""
+                                + inbox[inboxcur][3]
+                                + "\" to \""
+                                + inbox[inboxcur][1]
+                                + "\"")
                             data = ""       # pyint: disable=redefined-outer-name
                             ret = sqlQuery("SELECT message FROM inbox WHERE msgid=?", inbox[inboxcur][0])
                             if ret != []:
@@ -453,13 +452,13 @@ def handlech(c, stdscr):
                         if t == "1":  # View
                             set_background_title(
                                 d,
-                                "\"" +
-                                sentbox[sentcur][4] +
-                                "\" from \"" +
-                                sentbox[sentcur][3] +
-                                "\" to \"" +
-                                sentbox[sentcur][1] +
-                                "\"")
+                                "\""
+                                + sentbox[sentcur][4]
+                                + "\" from \""
+                                + sentbox[sentcur][3]
+                                + "\" to \""
+                                + sentbox[sentcur][1]
+                                + "\"")
                             data = ""
                             ret = sqlQuery(
                                 "SELECT message FROM sent WHERE subject=? AND ackdata=?",
@@ -949,11 +948,11 @@ def sendMessage(sender="", recv="", broadcast=None, subject="", body="", reply=F
                     if version > 4 or version <= 1:
                         set_background_title(d, "Recipient address error")
                         scrollbox(d, unicode(
-                            "Could not understand version number " +
-                            version +
-                            "of address" +
-                            addr +
-                            "."))
+                            "Could not understand version number "
+                            + version
+                            + " of address "
+                            + addr
+                            + "."))
                         continue
                     if stream > 1 or stream == 0:
                         set_background_title(d, "Recipient address error")
@@ -984,7 +983,7 @@ def loadInbox():
     """Load the list of messages"""
     sys.stdout = sys.__stdout__
     print("Loading inbox messages...")
-    sys.stdout = printlog
+    sys.stdout = printlog  # pylint: disable=redefined-variable-type
 
     where = "toaddress || fromaddress || subject || message"
     what = "%%"
@@ -1037,7 +1036,7 @@ def loadSent():
     """Load the messages that sent"""
     sys.stdout = sys.__stdout__
     print("Loading sent messages...")
-    sys.stdout = printlog
+    sys.stdout = printlog  # pylint: disable=redefined-variable-type
 
     where = "toaddress || fromaddress || subject || message"
     what = "%%"
@@ -1123,7 +1122,7 @@ def loadAddrBook():
     """Load address book"""
     sys.stdout = sys.__stdout__
     print("Loading address book...")
-    sys.stdout = printlog
+    sys.stdout = printlog  # pylint: disable=redefined-variable-type
 
     ret = sqlQuery("SELECT label, address FROM addressbook")
     for row in ret:
@@ -1230,7 +1229,7 @@ def doShutdown():
     """Shutting the app down"""
     sys.stdout = sys.__stdout__
     print("Shutting down...")
-    sys.stdout = printlog
+    sys.stdout = printlog  # pylint: disable=redefined-variable-type
     shutdown.doCleanShutdown()
     sys.stdout = sys.__stdout__
     sys.stderr = sys.__stderr__

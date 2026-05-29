@@ -1,5 +1,5 @@
 
-from PyQt4.QtCore import QThread, SIGNAL
+from PyQt4.QtCore import QThread, SIGNAL  # pylint: disable=import-error
 import sys
 
 import queues
@@ -17,6 +17,7 @@ class UISignaler(QThread):
             cls._instance = UISignaler()
         return cls._instance
 
+    # pylint: disable=too-many-branches
     def run(self):
         while True:
             command, data = queues.UISignalQueue.get()
@@ -40,12 +41,14 @@ class UISignaler(QThread):
             elif command == 'displayNewInboxMessage':
                 inventoryHash, toAddress, fromAddress, subject, body = data
                 self.emit(SIGNAL(
-                    "displayNewInboxMessage(PyQt_PyObject,PyQt_PyObject,PyQt_PyObject,PyQt_PyObject,PyQt_PyObject)"),
+                    "displayNewInboxMessage(PyQt_PyObject,PyQt_PyObject,PyQt_PyObject,"
+                    "PyQt_PyObject,PyQt_PyObject)"),
                     inventoryHash, toAddress, fromAddress, subject, body)
             elif command == 'displayNewSentMessage':
                 toAddress, fromLabel, fromAddress, subject, message, ackdata = data
                 self.emit(SIGNAL(
-                    "displayNewSentMessage(PyQt_PyObject,PyQt_PyObject,PyQt_PyObject,PyQt_PyObject,PyQt_PyObject,PyQt_PyObject)"),
+                    "displayNewSentMessage(PyQt_PyObject,PyQt_PyObject,PyQt_PyObject,"
+                    "PyQt_PyObject,PyQt_PyObject,PyQt_PyObject)"),
                     toAddress, fromLabel, fromAddress, subject, message, ackdata)
             elif command == 'updateNetworkStatusTab':
                 outbound, add, destination = data
